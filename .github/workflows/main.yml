@@ -18,17 +18,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Find and build APK
+    - name: Find gradlew and build APK
       run: |
-        find . -name "gradlew" -exec chmod +x {} \;
-        if [ -f "./gradlew" ]; then
-          ./gradlew assembleDebug
-        elif [ -f "./uangku/gradlew" ]; then
-          cd uangku && ./gradlew assembleDebug
+        GRADLEW_PATH=$(find . -name "gradlew" | head -n 1)
+        if [ -z "$GRADLEW_PATH" ]; then
+          echo "gradlew not found!"
+          exit 1
         fi
+        DIR=$(dirname "$GRADLEW_PATH")
+        cd "$DIR"
+        chmod +x gradlew
+        ./gradlew assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: '**/build/outputs/apk/debug/*.apk'
+        path: '/**/app/build/outputs/apk/debug/*.apk'
