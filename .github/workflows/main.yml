@@ -18,20 +18,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Find gradlew and build APK
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: Build APK with Gradle
       run: |
-        GRADLEW_PATH=$(find . -name "gradlew" | head -n 1)
-        if [ -z "$GRADLEW_PATH" ]; then
-          echo "gradlew not found!"
-          exit 1
-        fi
-        DIR=$(dirname "$GRADLEW_PATH")
-        cd "$DIR"
-        chmod +x gradlew
-        ./gradlew assembleDebug
+        TARGET_DIR=$(find . -name "build.gradle*" -exec dirname {} \; | head -n 1)
+        cd "$TARGET_DIR"
+        gradle assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: '/**/app/build/outputs/apk/debug/*.apk'
+        path: '/**/build/outputs/apk/debug/*.apk'
