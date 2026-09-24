@@ -1,0 +1,6 @@
+{
+  "name": "UangKu",
+  "description": "Aplikasi manajemen keuangan pribadi modern untuk mencatat pemasukan, pengeluaran, laporan, dan grafik tren saldo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
